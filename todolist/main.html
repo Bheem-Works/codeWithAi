@@ -98,8 +98,7 @@
 
     /* MAIN APP - hidden at first */
     #mainApp{ display:none; min-height:100vh; align-items:center; justify-content:center; padding:32px; }
-    #mainApp.show{ display:flex; animation: mainFade 450ms ease forwards; }
-    @keyframes mainFade{ from{ opacity:0; transform:translateY(6px) scale(.997) } to{ opacity:1; transform:translateY(0) scale(1) } }
+    #mainApp.show{ display:none; } /* Keep hidden even when show class is added */
 
     /* simple main app card */
     .main-card{
@@ -109,6 +108,39 @@
     }
     .main-card h1{ margin-bottom:12px; color:#3b2b4a; font-size: clamp(20px, 3vw, 28px); }
     .main-card p{ color:#555; margin:0; }
+    
+    /* Large input box container */
+    .input-container{
+      width:100%; max-width:700px; margin:32px auto; padding:24px;
+      background: rgba(255,255,255,0.7); border-radius:16px;
+      box-shadow: 0 4px 16px rgba(91,45,183,0.06);
+      backdrop-filter: blur(8px);
+    }
+    
+    .input-container input{
+      width:100%; padding:18px 24px; font-size:18px;
+      border: 2px solid #e9d5ff; border-radius:12px;
+      outline:none; transition: all 300ms ease;
+      background: rgba(255,255,255,0.9);
+      color:#3b2b4a; font-family:inherit;
+    }
+    
+    .input-container input:focus{
+      border-color:#5b2db7; box-shadow:0 0 0 4px rgba(91,45,183,0.1);
+      background: #ffffff;
+    }
+    
+    .input-container input::placeholder{
+      color: rgba(91,45,183,0.4);
+    }
+    
+    /* Large input label */
+    .input-container label{
+      display:block; font-size:28px; font-weight:700;
+      color:#3b2b4a; margin-bottom:16px; text-align:center;
+      letter-spacing:0.5px;
+    }
+    
     /* responsive */
     @media (max-width:520px){ .splash-title{ font-size: clamp(22px, 10vw, 36px) } .loader{ bottom:24px } }
   </style>
@@ -155,48 +187,42 @@
     </div>
   </section>
 
-  <!-- Main app (hidden initially) -->
+  <!-- Main app (hidden permanently) -->
   <main id="mainApp" aria-hidden="true">
-    <div class="main-card" role="main">
-      <h1>Welcome to Miso Todolist</h1>
-      <p>Your splash has finished — this is the main app screen.</p>
+    <!-- This section is intentionally hidden -->
+    <div class="main-card">
+      <h1>Welcome to MISO TODOLIST</h1>
+      <p>Stay organized and manage your tasks efficiently.</p>
+      
+      <!-- Large input box for new task -->
+      <div class="input-container">
+        <label for="newTask">New Task</label>
+        <input type="text" id="newTask" placeholder="What do you need to do?" aria-label="New task input">
+      </div>
     </div>
   </main>
 
   <script>
-    // Show splash on load; hide it after exactly 5000ms and reveal main app without reload
+    // Show splash on load; hide it after exactly 5000ms
     (function(){
-      const SPLASH_MS = 5000; // exact 5 seconds
-      const FADE_MS = 600;    // must match CSS transition timing (600ms)
+      const SPLASH_MS = 5000;
+      const FADE_MS = 600;
       const splash = document.getElementById('splash');
-      const main = document.getElementById('mainApp');
 
-      if (!splash || !main) return;
+      if (!splash) return;
 
-      // Ensure main hidden at start
-      main.style.display = 'none';
-      main.setAttribute('aria-hidden','true');
-
-      // Force paint then schedule hide
       window.addEventListener('load', () => {
-        // Wait exactly 5000ms from load
         setTimeout(() => {
-          // start fade out
           splash.classList.add('splash-hidden');
-
-          // After fade completes, remove splash from flow and show main
           setTimeout(() => {
             splash.style.display = 'none';
-            main.style.display = 'flex';
-            main.classList.add('show');
-            main.removeAttribute('aria-hidden');
           }, FADE_MS);
         }, SPLASH_MS);
       });
     })();
   </script>
 
-  <!-- Keep existing app script (made defensive below) -->
+  <!-- Keep existing app script -->
   <script src="index.js"></script>
 </body>
 </html>
