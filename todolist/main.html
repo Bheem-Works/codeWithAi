@@ -98,7 +98,7 @@
 
     /* MAIN APP - hidden at first */
     #mainApp{ display:none; min-height:100vh; align-items:center; justify-content:center; padding:32px; }
-    #mainApp.show{ display:none; } /* Keep hidden even when show class is added */
+    #mainApp.show{ display:flex; } /* Keep hidden even when show class is added */
 
     /* simple main app card */
     .main-card{
@@ -208,6 +208,7 @@
       const SPLASH_MS = 5000;
       const FADE_MS = 600;
       const splash = document.getElementById('splash');
+      const mainApp = document.getElementById('mainApp');
 
       if (!splash) return;
 
@@ -216,6 +217,8 @@
           splash.classList.add('splash-hidden');
           setTimeout(() => {
             splash.style.display = 'none';
+            mainApp.classList.add('show');
+            mainApp.removeAttribute('aria-hidden');
           }, FADE_MS);
         }, SPLASH_MS);
       });
