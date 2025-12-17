@@ -97,50 +97,67 @@
     @keyframes dotPop{ 0%,80%,100%{ transform:translateY(0); opacity:.7 } 40%{ transform:translateY(-8px); opacity:1 } }
 
     /* MAIN APP - hidden at first */
-    #mainApp{ display:none; min-height:100vh; align-items:center; justify-content:center; padding:32px; }
-    #mainApp.show{ display:flex; } /* Keep hidden even when show class is added */
+    /* keep main hidden until splash ends; place content at top-center */
+    #mainApp{ display:none; min-height:100vh; align-items:flex-start; justify-content:center; padding:72px 32px 32px; }
+    #mainApp.show{ display:flex; }
 
-    /* simple main app card */
-    .main-card{
-      width:100%; max-width:640px; padding:36px; border-radius:12px; box-shadow:0 10px 30px rgba(21,12,60,0.08);
-      background: linear-gradient(180deg, rgba(255,255,255,0.96), rgba(255,255,255,0.9));
-      text-align:center;
+    /* Goal input/button block (top-centered) */
+    .goal{
+      width:100%;
+      max-width:820px;
+      margin:0 auto;
+      display:flex;
+      gap:12px;
+      align-items:center;
+      justify-content:center;
+      padding:18px;
+      border-radius:14px;
+      background: rgba(255,255,255,0.88);
+      box-shadow: 0 6px 24px rgba(91,45,183,0.06);
     }
-    .main-card h1{ margin-bottom:12px; color:#3b2b4a; font-size: clamp(20px, 3vw, 28px); }
-    .main-card p{ color:#555; margin:0; }
-    
-    /* Large input box container */
-    .input-container{
-      width:100%; max-width:700px; margin:32px auto; padding:24px;
-      background: rgba(255,255,255,0.7); border-radius:16px;
-      box-shadow: 0 4px 16px rgba(91,45,183,0.06);
-      backdrop-filter: blur(8px);
+
+    .goal input[type="text"]{
+      flex:1;
+      min-height:64px;
+      padding:18px 20px;
+      font-size:18px;
+      border:2px solid rgba(91,45,183,0.12);
+      border-radius:10px;
+      outline:none;
+      transition: border-color .18s ease, box-shadow .18s ease;
+      background: rgba(255,255,255,0.98);
+      color:#3b2b4a;
     }
-    
-    .input-container input{
-      width:100%; padding:18px 24px; font-size:18px;
-      border: 2px solid #e9d5ff; border-radius:12px;
-      outline:none; transition: all 300ms ease;
-      background: rgba(255,255,255,0.9);
-      color:#3b2b4a; font-family:inherit;
+    .goal input[type="text"]::placeholder{
+      color: rgba(91,45,183,0.36);
+      font-size:16px;
     }
-    
-    .input-container input:focus{
-      border-color:#5b2db7; box-shadow:0 0 0 4px rgba(91,45,183,0.1);
-      background: #ffffff;
+
+    .goal button{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      min-width:64px;
+      min-height:64px;
+      padding:12px 16px;
+      border-radius:10px;
+      border:none;
+      background: linear-gradient(180deg,#6f3bd8,#5b2db7);
+      color:#fff;
+      cursor:pointer;
+      box-shadow: 0 8px 18px rgba(91,45,183,0.18);
+      transition: transform .12s ease, box-shadow .12s ease, opacity .12s;
     }
-    
-    .input-container input::placeholder{
-      color: rgba(91,45,183,0.4);
+    .goal button svg{ width:20px; height:20px; stroke: #fff; display:block; }
+    .goal button:hover{ transform: translateY(-3px); box-shadow: 0 12px 30px rgba(91,45,183,0.22); }
+    .goal button:active{ transform: translateY(0); opacity:0.95; }
+
+    @media (max-width:520px){
+      .goal{ flex-direction:column; padding:14px; gap:10px; }
+      .goal input[type="text"]{ min-height:56px; font-size:16px; }
+      .goal button{ width:100%; min-width:0; height:52px; border-radius:10px; }
     }
-    
-    /* Large input label */
-    .input-container label{
-      display:block; font-size:28px; font-weight:700;
-      color:#3b2b4a; margin-bottom:16px; text-align:center;
-      letter-spacing:0.5px;
-    }
-    
+
     /* responsive */
     @media (max-width:520px){ .splash-title{ font-size: clamp(22px, 10vw, 36px) } .loader{ bottom:24px } }
   </style>
@@ -189,23 +206,21 @@
 
   <!-- Main app (hidden permanently) -->
   <main id="mainApp" aria-hidden="true">
-    <!-- This section is intentionally hidden -->
-    <div class="main-card">
-      <h1>Welcome to MISO TODOLIST</h1>
-      <p>Stay organized and manage your tasks efficiently.</p>
-      
-      <!-- Large input box for new task -->
-      <div class="input-container">
-        <label for="newTask">New Task</label>
-        <input type="text" id="newTask" placeholder="What do you need to do?" aria-label="New task input">
-      </div>
+    <div class="goal" role="form" aria-label="Add goal">
+      <input type="text" placeholder="Enter your goal" aria-label="Goal input">
+      <button aria-label="Add goal">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+          <line x1="12" y1="5" x2="12" y2="19"></line>
+          <line x1="5" y1="12" x2="19" y2="12"></line>
+        </svg>
+      </button>
     </div>
   </main>
 
   <script>
     // Show splash on load; hide it after exactly 5000ms
     (function(){
-      const SPLASH_MS = 5000;
+      const SPLASH_MS = 1000;
       const FADE_MS = 600;
       const splash = document.getElementById('splash');
       const mainApp = document.getElementById('mainApp');
